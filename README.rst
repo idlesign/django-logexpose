@@ -8,6 +8,12 @@ https://github.com/idlesign/django-logexpose
 .. image:: https://pypip.in/d/django-logexpose/badge.png
         :target: https://crate.io/packages/django-logexpose
 
+.. image:: https://coveralls.io/repos/idlesign/django-logexpose/badge.png
+    :target: https://coveralls.io/r/idlesign/django-logexpose
+
+.. image:: https://travis-ci.org/idlesign/django-logexpose.svg?branch=master
+    :target: https://travis-ci.org/idlesign/django-logexpose
+
 
 Description
 -----------
@@ -57,4 +63,3 @@ Documentation
 -------------
 
 http://django-logexpose.readthedocs.org/
-

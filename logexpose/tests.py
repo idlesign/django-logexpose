@@ -1,5 +1,5 @@
 from django.test import TestCase, RequestFactory
-from django.http.response import HttpResponse
+from django.http import HttpResponse
 
 from .loggers.base import BaseLogger
 from .loggers.request import RequestLogger

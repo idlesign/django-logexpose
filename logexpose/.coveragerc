@@ -1,0 +1,3 @@
+[run]
+include = logexpose/*
+omit = logexpose/migrations/*, logexpose/south_migrations/*, logexpose/runtests.py, logexpose/tests.py, logexpose/config.py
