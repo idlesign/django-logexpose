@@ -18,7 +18,7 @@ class RequestLogger(BaseLogger):
     def generate_grp_id(self):
         return '%s/%s' % (self.client_id, uuid4())
 
-    def pick_grp_id(self, grp_id):
+    def pick_grp_id(self, grp_id=None):
         return self.grp_id
 
     @classmethod

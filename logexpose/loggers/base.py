@@ -27,7 +27,7 @@ class BaseLogger(object):
     def generate_msg_id(self):
         return str(uuid4())
 
-    def pick_grp_id(self, grp_id):
+    def pick_grp_id(self, grp_id=None):
         return grp_id or self.grp_id or self.generate_grp_id()
 
     def _store(self, lvl, msg, grp_id, msg_id, parent_msg_id, props):
@@ -97,11 +97,13 @@ class BaseLogger(object):
     def default_func_after(self, func, fargs, fkwargs, level, ids_tuple):
         grp_id, __, parent_msg_id = ids_tuple
 
-        self.get_level_method(level)(
+        ids_tuple = self.get_level_method(level)(
             'After `%s`' % get_func_path(func),
             grp_id=grp_id,
             parent_msg_id=parent_msg_id
         )
+
+        return ids_tuple
 
     @classmethod
     def get_from_thread(cls, *args, **kwargs):
