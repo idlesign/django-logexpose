@@ -53,7 +53,8 @@ class BaseLogger(object):
             'props': props
         }
         json = dumps(d, default=lambda o: repr(o))
-        print(json)
+
+        print(json)  # todo put into store
 
         return grp_id, msg_id, parent_msg_id
 
@@ -89,7 +90,7 @@ class BaseLogger(object):
             grp_id=grp_id,
             msg_id=msg_id,
             parent_msg_id=parent_msg_id,
-            props={'args': fargs, 'kwargs': fkwargs}
+            props={'args': [type(a) for a in fargs], 'kwargs': {k: type(v) for k, v in fkwargs.items()}}
         )
 
         return ids_tuple
