@@ -20,7 +20,7 @@ Quick start
 
 1. Add `logexpose.middleware.RequestLoggerMiddleware` to MIDDLEWARE_CLASSES;
 
-2. And you're ready to `logexpose` logging facilities:
+2. And you're ready to use `logexpose` logging facilities:
 
     .. code-block:: python
 
@@ -47,7 +47,7 @@ Quick start
 
             # Functions with no access to `request` also can get loggers by their aliases.
             get_logger('rlog').warning('A warning!', props={
-                'myprop_1': 'some_value'  # Supply some addition properties to a message.
+                'myprop_1': 'some_value'  # Supply some additional properties to a message.
             })
 
             return 'ping-pong'
