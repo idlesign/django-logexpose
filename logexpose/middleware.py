@@ -1,15 +1,11 @@
-try:
-    from django.utils.module_loading import import_string as import_func
-except ImportError:
-    from django.utils.module_loading import import_by_path as import_func
-
 from .settings import MIDDLEWARE_LOGGERS
+from .utils import import_class
 
 
 LOGGERS = []
 
 for middleware_path in MIDDLEWARE_LOGGERS:
-    LOGGERS.append(import_func(middleware_path))
+    LOGGERS.append(import_class(middleware_path))
 
 
 class RequestLoggerMiddleware(object):

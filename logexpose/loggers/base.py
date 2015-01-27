@@ -1,13 +1,15 @@
 from uuid import uuid4
-from json import dumps
 from collections import deque
+from threading import current_thread
 
 from django.utils.translation import gettext as _
+from django.utils import timezone
 
-from ..utils import thread_get_logger, thread_init_logger, get_func_path
+from ..utils import thread_get_logger, thread_init_logger, get_func_path, get_backend
 
 
 _PARENT_AUTO = object()
+_BACKEND = get_backend()
 
 
 class BaseLogger(object):
@@ -30,7 +32,7 @@ class BaseLogger(object):
     def pick_grp_id(self, grp_id=None):
         return grp_id or self.grp_id or self.generate_grp_id()
 
-    def _store(self, lvl, msg, grp_id, msg_id, parent_msg_id, props):
+    def _put(self, lvl, msg, grp_id, msg_id, parent_msg_id, props):
 
         if msg_id is None:
             msg_id = self.generate_msg_id()
@@ -43,35 +45,33 @@ class BaseLogger(object):
 
         grp_id = self.pick_grp_id(grp_id)
 
-        d = {
+        _BACKEND.put({
+            'time': timezone.now(),
+            'logger': self.alias,
             'lvl': lvl,
             'msg': msg,
-            'id': msg_id,
-            'pid': parent_msg_id,
             'gid': grp_id,
-            'logger': self.alias,
+            'mid': msg_id,
+            'pid': parent_msg_id,
             'props': props
-        }
-        json = dumps(d, default=lambda o: repr(o))
-
-        print(json)  # todo put into store
+        })
 
         return grp_id, msg_id, parent_msg_id
 
     def debug(self, msg, grp_id=None, msg_id=None, props=None, parent_msg_id=_PARENT_AUTO):
-        return self._store('debug', msg, grp_id, msg_id, parent_msg_id, props)
+        return self._put('debug', msg, grp_id, msg_id, parent_msg_id, props)
 
     def info(self, msg, grp_id=None, msg_id=None, props=None, parent_msg_id=_PARENT_AUTO):
-        return self._store('info', msg, grp_id, msg_id, parent_msg_id, props)
+        return self._put('info', msg, grp_id, msg_id, parent_msg_id, props)
 
     def warning(self, msg, grp_id=None, msg_id=None, props=None, parent_msg_id=_PARENT_AUTO):
-        return self._store('warning', msg, grp_id, msg_id, parent_msg_id, props)
+        return self._put('warning', msg, grp_id, msg_id, parent_msg_id, props)
 
     def error(self, msg, grp_id=None, msg_id=None, props=None, parent_msg_id=_PARENT_AUTO):
-        return self._store('error', msg, grp_id, msg_id, parent_msg_id, props)
+        return self._put('error', msg, grp_id, msg_id, parent_msg_id, props)
 
     def critical(self, msg, grp_id=None, msg_id=None, props=None, parent_msg_id=_PARENT_AUTO):
-        return self._store('critical', msg, grp_id, msg_id, parent_msg_id, props)
+        return self._put('critical', msg, grp_id, msg_id, parent_msg_id, props)
 
     def get_parent_msg_id(self):
         try:
@@ -85,12 +85,17 @@ class BaseLogger(object):
     def default_func_before(self, func, fargs, fkwargs, level, ids_tuple):
         grp_id, msg_id, parent_msg_id = ids_tuple
 
+        thread = current_thread()
         ids_tuple = self.get_level_method(level)(
             'Before `%s`' % get_func_path(func),
             grp_id=grp_id,
             msg_id=msg_id,
             parent_msg_id=parent_msg_id,
-            props={'args': [type(a) for a in fargs], 'kwargs': {k: type(v) for k, v in fkwargs.items()}}
+            props={
+                'args': [type(a) for a in fargs],
+                'kwargs': {k: type(v) for k, v in fkwargs.items()},
+                'thread': '%s (%s)' % (thread.name, thread.ident)
+            }
         )
 
         return ids_tuple
@@ -108,10 +113,8 @@ class BaseLogger(object):
 
     @classmethod
     def get_from_thread(cls, *args, **kwargs):
-        logger = thread_get_logger(cls.alias)
-        if logger is None:
-            logger = thread_init_logger(cls(*args, **kwargs))
-        return logger
+        alias = cls.alias
+        return thread_get_logger(alias) or thread_init_logger(alias, cls(*args, **kwargs))
 
     @classmethod
     def process_request(cls, request):

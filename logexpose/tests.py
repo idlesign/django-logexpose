@@ -1,10 +1,15 @@
 from django.test import TestCase, RequestFactory
 from django.http import HttpResponse
+from django.utils import timezone
 
 from .loggers.base import BaseLogger
 from .loggers.request import RequestLogger
 from .loggers.process import ProcessLogger
-from .utils import thread_get_logger, thread_init_logger, get_func_path, _THREAD_LOCAL
+from .backends.base import BaseDataBackend
+from .backends.database import DatabaseBackend
+from .models import Record
+from .utils import thread_get_logger, thread_init_logger, get_func_path, thread_get_backend, thread_init_backend, \
+    _THREAD_LOCAL, _THREAD_ATTR_BACKENDS, _THREAD_ATTR_LOGGERS
 from .toolbox import get_logger
 from .decorators import logexpose as logexpose_decor
 from .middleware import RequestLoggerMiddleware
@@ -23,7 +28,12 @@ class LogexposeTestCase(TestCase):
     def tearDown(self):
         # Cleaning.
         try:
-            delattr(_THREAD_LOCAL, 'logexpose')
+            delattr(_THREAD_LOCAL, _THREAD_ATTR_LOGGERS)
+        except AttributeError:
+            pass
+
+        try:
+            delattr(_THREAD_LOCAL, _THREAD_ATTR_BACKENDS)
         except AttributeError:
             pass
 
@@ -125,15 +135,26 @@ class RequestLoggerTest(LogexposeTestCase):
 
 class UtilsTest(LogexposeTestCase):
 
-    def test_get_from_thread(self):
+    def test_get_logger_from_thread(self):
         logger = thread_get_logger('base')
         self.assertIsNone(logger)
 
-        logger = thread_init_logger(BaseLogger)
+        logger = thread_init_logger('base', BaseLogger)
         self.assertIs(logger, BaseLogger)
 
         logger = thread_get_logger('base')
         self.assertIs(logger, BaseLogger)
+
+    def test_get_backend_from_thread(self):
+        alias = DatabaseBackend.__name__
+        backend = thread_get_backend(alias)
+        self.assertIsNone(backend)
+
+        backend = thread_init_backend(alias, DatabaseBackend)
+        self.assertIs(backend, DatabaseBackend)
+
+        backend = thread_get_backend(alias)
+        self.assertIs(backend, DatabaseBackend)
 
     def test_get_func_path(self):
         path = get_func_path(test_func)
@@ -146,7 +167,7 @@ class ToolboxTest(LogexposeTestCase):
         logger = get_logger('base')
         self.assertIsNone(logger)
 
-        thread_init_logger(BaseLogger)
+        thread_init_logger('base', BaseLogger)
 
         logger = get_logger('base')
         self.assertIs(logger, BaseLogger)
@@ -188,3 +209,23 @@ class DecoratorsTest(LogexposeTestCase):
         result = func('func_result', 2)
 
         self.assertEqual(result, 'func_result')
+
+
+class RecordModelTest(LogexposeTestCase):
+
+    def test_create(self):
+        time = timezone.now()
+        r = Record(**{
+            'time': time,
+            'lvl': 'info',
+            'msg': 'some message',
+            'mid': '123',
+            'pid': None,
+            'gid': 'default',
+            'logger': 'some',
+            'props': DatabaseBackend.prepare_props({'a': 'b'})
+        })
+        r.save()
+
+        self.assertIsNotNone(r.pk)
+        self.assertEqual(str(r), '%s INFO: some message' % time)

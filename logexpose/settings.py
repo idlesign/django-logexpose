@@ -1,10 +1,10 @@
 from django.conf import settings
 
 # Data backend class.
-DATA_BACKEND = getattr(settings, 'LOGEXPOSE_DATA_BACKEND', 'logexpose.backends.cache.CacheBackend')
+DATA_BACKEND = getattr(settings, 'LOGEXPOSE_DATA_BACKEND', 'logexpose.backends.database.DatabaseBackend')
 
-# Data backend name (as in CACHES or DATABASES of settings.py)
-DATA_BACKEND_NAME = getattr(settings, 'LOGEXPOSE_DATA_BACKEND_NAME', 'logexpose')
+# Data backend initialization parameters.
+DATA_BACKEND_PARAMS = getattr(settings, 'LOGEXPOSE_DATA_BACKEND_PARAMS', None)
 
 # Loggers activated by middleware.
 MIDDLEWARE_LOGGERS = getattr(settings, 'LOGEXPOSE_MIDDLEWARE_LOGGERS', (
