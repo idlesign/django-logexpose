@@ -1,0 +1,11 @@
+languages:
+  JavaScript: true
+  Python: true
+
+exclude_paths:
+- "logexpose/runtests.py"
+- "logexpose/tests.py"
+- "logexpose/tests/*"
+- "logexpose/migrations/*"
+- "logexpose/south_migrations/*"
+- "docs/*"
