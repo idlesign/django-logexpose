@@ -2,20 +2,23 @@ django-logexpose
 ================
 https://github.com/idlesign/django-logexpose
 
-.. image:: https://badge.fury.io/py/django-logexpose.png
-    :target: http://badge.fury.io/py/django-logexpose
+.. image:: https://img.shields.io/pypi/v/django-logexpose.svg
+    :target: https://pypi.python.org/pypi/django-logexpose
 
-.. image:: https://pypip.in/d/django-logexpose/badge.png
-        :target: https://crate.io/packages/django-logexpose
+.. image:: https://img.shields.io/pypi/dm/django-logexpose.svg
+    :target: https://pypi.python.org/pypi/django-logexpose
 
-.. image:: https://coveralls.io/repos/idlesign/django-logexpose/badge.png
+.. image:: https://img.shields.io/pypi/l/django-logexpose.svg
+    :target: https://pypi.python.org/pypi/django-logexpose
+
+.. image:: https://img.shields.io/coveralls/idlesign/django-logexpose/master.svg
     :target: https://coveralls.io/r/idlesign/django-logexpose
 
-.. image:: https://travis-ci.org/idlesign/django-logexpose.svg?branch=master
+.. image:: https://img.shields.io/travis/idlesign/django-logexpose/master.svg
     :target: https://travis-ci.org/idlesign/django-logexpose
 
-.. image:: https://landscape.io/github/idlesign/django-logexpose/master/landscape.svg?style=plastic
-   :target: https://landscape.io/github/idlesign/django-logexpose/master
+.. image:: https://img.shields.io/codeclimate/github/idlesign/django-logexpose.svg
+   :target: https://codeclimate.com/github/idlesign/django-logexpose
 
 
 Description
