@@ -2,21 +2,30 @@ django-logexpose installation
 =============================
 
 
-Python ``setuptools`` package is required to install django-logexpose.
+Python ``pip`` package is required to install ``django-logexpose``.
 
 
-Use the following command line to install django-logexpose from sources directory (containing setup.py):
+From sources
+------------
 
-    easy_install .
+Use the following command line to install ``django-logexpose`` from sources directory (containing setup.py):
+
+    pip install .
 
 or
 
     python setup.py install
 
 
-Alternatively you can install an up-to-date version of django-logexpose from PyPI:
+From PyPI
+---------
 
-    easy_install django-logexpose
+Alternatively you can install ``django-logexpose`` from PyPI:
+
+    pip install django-logexpose
 
 
-Note: `easy_install` is bundled with ``setuptools``.
+Use `-U` flag for upgrade:
+
+    pip install -U django-logexpose
+
