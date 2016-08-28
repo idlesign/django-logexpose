@@ -17,8 +17,8 @@ https://github.com/idlesign/django-logexpose
 .. image:: https://img.shields.io/travis/idlesign/django-logexpose/master.svg
     :target: https://travis-ci.org/idlesign/django-logexpose
 
-.. image:: https://img.shields.io/codeclimate/github/idlesign/django-logexpose.svg
-   :target: https://codeclimate.com/github/idlesign/django-logexpose
+.. image:: https://landscape.io/github/idlesign/django-logexpose/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/idlesign/django-logexpose/master
 
 
 Description
