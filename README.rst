@@ -5,9 +5,6 @@ https://github.com/idlesign/django-logexpose
 .. image:: https://img.shields.io/pypi/v/django-logexpose.svg
     :target: https://pypi.python.org/pypi/django-logexpose
 
-.. image:: https://img.shields.io/pypi/dm/django-logexpose.svg
-    :target: https://pypi.python.org/pypi/django-logexpose
-
 .. image:: https://img.shields.io/pypi/l/django-logexpose.svg
     :target: https://pypi.python.org/pypi/django-logexpose
 
