@@ -1,7 +1,12 @@
 django-logexpose changelog
 ==========================
 
+
+Unreleased
+----------
+* Dropped support for Python<3.4 and Django<1.7.
+
+
 v0.1.0
 ------
 + Basic functionality.
-

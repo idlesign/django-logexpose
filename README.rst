@@ -60,9 +60,3 @@ Quick start
             })
 
             return 'ping-pong'
-
-
-Documentation
--------------
-
-http://django-logexpose.readthedocs.org/
